@@ -23,6 +23,7 @@ did the dishwasher run this month?" and anything else you can count.
 - [Configuration](#configuration)
 - [Creating a counter sensor](#creating-a-counter-sensor)
 - [Troubleshooting](#troubleshooting)
+- [Translations](#translations)
 - [Development](#development)
 
 ## Requirements
@@ -319,12 +320,54 @@ Don't skip the availability template, for the reason
   template (see [above](#counter-helper--template-helper-no-yaml)). For History
   stats, remember that a device still on at midnight counts for the next day.
 
+## Translations
+
+The card follows the language set in your Home Assistant profile. It ships
+with English and Polish; any other language shows English text (month and
+weekday names are still localized by the browser).
+
+Translations are plain text files in the [`translations`](translations)
+folder, one per language, named by the language code Home Assistant uses:
+`de.properties`, `pt-BR.properties`. Each line is a `key = value` pair:
+
+```properties
+# Lines starting with # are comments
+legend.today = today
+error.entity_missing = Entity not found: {entity}
+```
+
+- `{name}` is a placeholder for a value the card fills in, such as `{count}`
+  or `{entity}`. Keep placeholders exactly as they are in English.
+- Keys ending in `.one`, `.two`, `.few`, `.many`, `.zero` and `.other` are
+  plural forms. Write the forms your language uses and always include `.other`.
+  English uses `.one` and `.other`; Polish uses `.one`, `.few` and `.many`. The
+  [CLDR plural rules](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+  list the forms for each language.
+- A key you leave out shows the English text, so a partial translation still
+  works.
+
+To add or change a language:
+
+1. Copy `translations/en.properties` to `translations/<language>.properties`
+   (or edit an existing file) and translate the values. Leave the keys as they
+   are.
+2. Run `npm run build` (Node.js 18 or newer, no `npm install` needed). The
+   build checks every file against `en.properties` and reports unknown keys,
+   changed placeholders and missing plural forms, then bundles all languages
+   into `dist/contributions-card.js`.
+3. Commit both the `.properties` file and the rebuilt `dist/contributions-card.js`,
+   and open a pull request.
+
 ## Development
 
-There is no build step: `dist/contributions-card.js` is the card. Open a pull
-request against that file, and run `node --check dist/contributions-card.js`
-before pushing.
+| Path | What it is |
+| --- | --- |
+| `src/contributions-card.js` | Card source. Edit this, not `dist/`. |
+| `translations/*.properties` | Text for each language. |
+| `scripts/build.mjs` | Bundles the source and translations into `dist/`. No dependencies. |
+| `dist/contributions-card.js` | The built card that HACS and manual installs use. Committed to the repository. |
 
-Translations live in the `STRINGS` object at the top of the file. To add a
-language, copy the `en` block, key it by the language code Home Assistant uses
-(for example `de`), and translate the strings.
+Run `npm run build` after changing the source or a translation, and commit the
+rebuilt `dist/contributions-card.js` with your change. `npm run check` (also
+run on every pull request) fails if a translation is invalid or `dist/` is out
+of date.

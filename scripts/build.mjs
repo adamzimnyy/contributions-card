@@ -23,7 +23,7 @@ const warnings = [];
 /** Parses "key = value" lines. # and ! start comments; \n, \t, \\ and \uXXXX escapes are supported. */
 function parseProperties(text, file) {
   const result = {};
-  const lines = text.replace(/^﻿/, "").split(/\r?\n/);
+  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
     // A trailing backslash continues the value on the next line.

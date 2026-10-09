@@ -2,6 +2,7 @@
   "name": "contributions-card",
   "version": "0.1.0",
   "description": "GitHub-style grid of days with activity for Home Assistant dashboards.",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {

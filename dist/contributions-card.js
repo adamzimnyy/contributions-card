@@ -11,7 +11,7 @@
  * https://github.com/adamzimnyy/contributions-card
  */
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const MIN_MONTHS = 1;
 const MAX_MONTHS = 3;
 const DEFAULT_MONTHS = 2;
@@ -339,6 +339,7 @@ class ContributionsCard extends HTMLElement {
           ${hostVars}
           --cc-active: var(--contributions-active-color, var(--success-color, #43a047));
           --cc-gap: 4px;
+          --cc-cell-min: 16px; /* smallest day square, even when cell_size computes smaller */
         }
         ha-card { padding: 16px; }
         .head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
@@ -349,7 +350,10 @@ class ContributionsCard extends HTMLElement {
         .month { width: 100%; max-width: 240px; }
         .months.vertical { grid-template-columns: minmax(0, 1fr); gap: 18px; --cc-gap: 5px; }
         .months.vertical .month { max-width: none; margin: 0 auto; }
-        .months.sized .month { max-width: calc(7 * var(--contributions-cell-max) + 6 * var(--cc-gap)); }
+        /* max() keeps a cell_size formula that drops to 0 or below (a short window) from collapsing the grid. */
+        .months.sized .month {
+          max-width: calc(7 * max(var(--cc-cell-min), var(--contributions-cell-max)) + 6 * var(--cc-gap));
+        }
         .mhead { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; margin-bottom: 6px; }
         .mname { font-size: 0.9em; font-weight: 600; color: var(--primary-text-color);
                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

@@ -109,7 +109,7 @@ entity: sensor.robot_vacuum_total_cleaning_count
 | `layout` | string | `horizontal` | `horizontal` puts months side by side; `vertical` puts them one under another at full width. |
 | `last_activity_entity` | string | — | Optional timestamp sensor with the time of the most recent activity (for example "last clean start"). Daily statistics for today are only complete after midnight; this sensor makes today light up straight away. |
 | `color` | string | theme success color | Color of active days, any CSS color. |
-| `cell_size` | number or string | — | Largest size of a day square. A number is in pixels (`24`); a string is any CSS length (`"2em"`, `"calc((100vh - 430px) / 12)"`). |
+| `cell_size` | number or string | — | Largest size of a day square. A number is in pixels (`24`); a string is any CSS length (`"2em"`, `"calc((100vh - 430px) / 12)"`). Squares never get smaller than 16 px, so a formula that drops to zero or below on a short screen still leaves a usable grid. |
 
 ### Examples
 
@@ -180,6 +180,14 @@ stacked months into the height of the window next to another card, add
 
 ```yaml
 cell_size: calc((100vh - 430px) / 12)
+```
+
+On a short screen, such as a phone held sideways, a formula like this can drop
+to zero or below. The card then uses its 16 px minimum; to choose a different
+minimum, wrap the formula in `max()`:
+
+```yaml
+cell_size: max(30px, calc((100vh - 430px) / 12))
 ```
 
 </details>

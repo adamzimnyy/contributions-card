@@ -5,7 +5,7 @@ for every day, filled when the sensor you choose counted something that day.
 Handy for "did the robot vacuum run?", "did I water the plants?", "how often
 did the dishwasher run this month?" and anything else you can count.
 
-![Contributions Card](docs/preview.png)
+<img src="docs/preview.png" alt="Contributions Card showing September and October with active days filled in green" width="360">
 
 - Shows the current month and up to two previous months.
 - Reads the sensor's long-term statistics, so it is not limited by the recorder's
@@ -113,31 +113,108 @@ entity: sensor.robot_vacuum_total_cleaning_count
 
 ### Examples
 
-<details>
-<summary>Show examples</summary>
+![Contributions Card in six configurations: one, two and three months side by side, two months one under another, a light theme with a purple color, and Polish](docs/examples/gallery.png)
 
-Three months, one under another, with today's activity picked up immediately:
+Each example below shows the card and its configuration. All of them use the
+same sensor; only the options change.
+
+<details>
+<summary><code>months: 1</code>, just the current month</summary>
+
+<img src="docs/examples/months-1.png" alt="One month" width="300">
+
+```yaml
+type: custom:contributions-card
+entity: sensor.robot_vacuum_total_cleaning_count
+title: Vacuuming
+months: 1
+```
+
+</details>
+
+<details>
+<summary><code>months: 2</code>, the default</summary>
+
+<img src="docs/preview.png" alt="Two months side by side" width="360">
+
+```yaml
+type: custom:contributions-card
+entity: sensor.robot_vacuum_total_cleaning_count
+title: Vacuuming
+```
+
+</details>
+
+<details>
+<summary><code>months: 3</code>, side by side on a wide card</summary>
+
+<img src="docs/examples/months-3.png" alt="Three months side by side" width="520">
+
+```yaml
+type: custom:contributions-card
+entity: sensor.robot_vacuum_total_cleaning_count
+title: Vacuuming
+months: 3
+```
+
+On a narrow card, months that don't fit side by side wrap to the next row.
+
+</details>
+
+<details>
+<summary><code>layout: vertical</code>, months one under another</summary>
+
+<img src="docs/examples/vertical.png" alt="Two months one under another" width="300">
 
 ```yaml
 type: custom:contributions-card
 entity: sensor.robot_vacuum_total_cleaning_count
 last_activity_entity: sensor.robot_vacuum_last_clean_begin
 title: Vacuuming
-months: 3
 layout: vertical
 ```
 
-Fit two stacked months into the height of the window next to another card:
+Day squares grow with the card's width. To keep them smaller, or to fit two
+stacked months into the height of the window next to another card, add
+`cell_size`:
 
 ```yaml
-type: custom:contributions-card
-entity: sensor.dishwasher_cycles
-layout: vertical
 cell_size: calc((100vh - 430px) / 12)
 ```
 
-The active color can also be set from a theme with the
-`contributions-active-color` variable.
+</details>
+
+<details>
+<summary><code>color</code>, a custom color for active days (light theme)</summary>
+
+<img src="docs/examples/light-color.png" alt="Light theme with purple active days" width="360">
+
+```yaml
+type: custom:contributions-card
+entity: sensor.plant_watering_count
+title: Plant watering
+color: "#7e57c2"
+```
+
+Everything else follows your theme. The active color can also be set in a
+theme with the `contributions-active-color` variable.
+
+</details>
+
+<details>
+<summary>Another language: Polish profile, week starting on Monday</summary>
+
+<img src="docs/examples/polish.png" alt="The card in Polish" width="360">
+
+```yaml
+type: custom:contributions-card
+entity: sensor.robot_vacuum_total_cleaning_count
+title: Odkurzanie
+```
+
+Language and the first day of the week come from your Home Assistant profile;
+there is nothing to configure in the card. See [Translations](#translations)
+to add a language.
 
 </details>
 

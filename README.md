@@ -68,6 +68,9 @@ under **Settings → Updates** like any other.
 
 ### Manual installation (without HACS)
 
+<details>
+<summary>Show the manual installation steps</summary>
+
 1. Download [`contributions-card.js`](dist/contributions-card.js) from the
    `dist` folder.
 2. Copy it to the `www` folder in your Home Assistant configuration folder
@@ -85,6 +88,8 @@ under **Settings → Updates** like any other.
 To update a manual install, replace the file and raise the number after `?v=`
 in the resource URL (for example `?v=2`). The new number makes browsers load
 the new copy instead of a cached one.
+
+</details>
 
 ## Configuration
 
@@ -108,6 +113,9 @@ entity: sensor.robot_vacuum_total_cleaning_count
 
 ### Examples
 
+<details>
+<summary>Show examples</summary>
+
 Three months, one under another, with today's activity picked up immediately:
 
 ```yaml
@@ -130,6 +138,8 @@ cell_size: calc((100vh - 430px) / 12)
 
 The active color can also be set from a theme with the
 `contributions-active-color` variable.
+
+</details>
 
 ## Creating a counter sensor
 
@@ -164,6 +174,9 @@ counts how many times an entity was in a given state during a period. Counting
 "today" and marking it `total_increasing` gives a counter that resets every
 midnight, which is all the card needs.
 
+<details>
+<summary>Show setup steps and YAML</summary>
+
 1. Go to **Settings → Devices & services → Helpers**, click **Create helper**
    and choose **History stats**.
 2. Pick the entity to watch, and enter the state to count, for example `on` for
@@ -196,6 +209,8 @@ Good to know:
 - To ignore short blips, set **Minimum state duration** under **Additional
   settings** (`min_state_duration` in YAML), for example to one minute.
 
+</details>
+
 ### Utility meter helper (no YAML)
 
 A [utility meter](https://www.home-assistant.io/integrations/utility_meter/)
@@ -204,6 +219,9 @@ follows a numeric sensor and keeps its own running total, which always has the
 up (total cycles, total runs) but has no state class, or when its number resets
 on its own (for example a "runs today" value that restarts at midnight or after
 a power cut).
+
+<details>
+<summary>Show setup steps and YAML</summary>
 
 1. Go to **Settings → Devices & services → Helpers**, click **Create helper**
    and choose **Utility meter**.
@@ -225,6 +243,8 @@ adding from the new value, so its total only goes up. The source must be a
 number; for something that switches state, use
 [History stats](#history-stats-helper-no-yaml) instead.
 
+</details>
+
 ### Counter helper + template helper (no YAML)
 
 Use this to count events exactly: every button press, every time an automation
@@ -233,6 +253,9 @@ runs, every door opening. A
 number, but counters have no state class, so a
 [template sensor helper](https://www.home-assistant.io/integrations/template/)
 copies it into a sensor that has one.
+
+<details>
+<summary>Show setup steps and YAML</summary>
 
 1. Go to **Settings → Devices & services → Helpers**, click **Create helper**,
    choose **Counter** and name it, for example "Plant watering".
@@ -265,6 +288,8 @@ reads that `0` as a reset, and when the real value comes back it counts the
 whole total again, which can light up a day by mistake. The same applies
 whenever a template copies another number.
 
+</details>
+
 ### Trigger-based template sensor (YAML)
 
 A trigger-based
@@ -272,6 +297,9 @@ A trigger-based
 count on its own, without a separate counter: each time its trigger fires, it
 adds one to its own value (`this.state`). Home Assistant restores the value
 after a restart. Trigger-based templates can only be written in YAML.
+
+<details>
+<summary>Show setup steps and YAML</summary>
 
 ```yaml
 template:
@@ -295,6 +323,8 @@ device dropping to `unavailable` and back.
 After adding it, reload template entities in the YAML tab of **Tools**
 (**Developer tools** before Home Assistant 2026.8), or restart Home Assistant.
 
+</details>
+
 ### A number that already counts, but without a state class
 
 If a device already reports a total that only goes up, but without a state
@@ -307,24 +337,49 @@ Don't skip the availability template, for the reason
 
 ## Troubleshooting
 
-- **The card isn't in the card picker, or says "Custom element doesn't
-  exist".** Clear the browser cache (in the Home Assistant Companion app, use
-  **Reset frontend cache** in the app's settings), then reload. For a manual
-  install, check the resource URL and type (**JavaScript module**).
-- **"… has no long-term statistics".** The sensor has no `state_class`. Use one
-  of the methods in [Creating a counter sensor](#creating-a-counter-sensor).
-- **Today doesn't light up until later.** Daily statistics are compiled through
-  the day. Set `last_activity_entity` to a timestamp sensor of the most recent
-  activity to mark today straight away.
-- **A day you didn't expect is lit.** For template sensors, add an availability
-  template (see [above](#counter-helper--template-helper-no-yaml)). For History
-  stats, remember that a device still on at midnight counts for the next day.
+<details>
+<summary>The card isn't in the card picker, or says "Custom element doesn't exist".</summary>
+
+Clear the browser cache (in the Home Assistant Companion app, use
+**Reset frontend cache** in the app's settings), then reload. For a manual
+install, check the resource URL and type (**JavaScript module**).
+
+</details>
+
+<details>
+<summary>"… has no long-term statistics".</summary>
+
+The sensor has no `state_class`. Use one
+of the methods in [Creating a counter sensor](#creating-a-counter-sensor).
+
+</details>
+
+<details>
+<summary>Today doesn't light up until later.</summary>
+
+Daily statistics are compiled through
+the day. Set `last_activity_entity` to a timestamp sensor of the most recent
+activity to mark today straight away.
+
+</details>
+
+<details>
+<summary>A day you didn't expect is lit.</summary>
+
+For template sensors, add an availability
+template (see [above](#counter-helper--template-helper-no-yaml)). For History
+stats, remember that a device still on at midnight counts for the next day.
+
+</details>
 
 ## Translations
 
 The card follows the language set in your Home Assistant profile. It ships
 with English and Polish; any other language shows English text (month and
 weekday names are still localized by the browser).
+
+<details>
+<summary>How to add or change a translation</summary>
 
 Translations are plain text files in the [`translations`](translations)
 folder, one per language, named by the language code Home Assistant uses:
@@ -358,7 +413,12 @@ To add or change a language:
 3. Commit both the `.properties` file and the rebuilt `dist/contributions-card.js`,
    and open a pull request.
 
+</details>
+
 ## Development
+
+<details>
+<summary>Project layout and build</summary>
 
 | Path | What it is |
 | --- | --- |
@@ -371,3 +431,5 @@ Run `npm run build` after changing the source or a translation, and commit the
 rebuilt `dist/contributions-card.js` with your change. `npm run check` (also
 run on every pull request) fails if a translation is invalid or `dist/` is out
 of date.
+
+</details>
